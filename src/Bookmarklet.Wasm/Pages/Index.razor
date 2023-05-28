@@ -1,0 +1,55 @@
+﻿@page "/"
+@using Stubble.Core
+@using Stubble.Core.Builders
+@using Bookmarklet.Wasm.Models
+@using NUglify
+@inject HttpClient HttpClient
+@inject IJSRuntime JsInterop
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h2">Instructions</MudText>
+<MudText Typo="Typo.body2">An Amazon affiliate Link bookmarklet generator.</MudText>
+<MudText Typo="Typo.h5">Step 1: Fill in Amazon Affiliate info</MudText>
+
+<MudCard Outlined="true">
+    <MudCardContent>
+        <MudTextField @bind-Value="BasePath" T="string" Label="Base Address"/>
+        <MudTextField @bind-Value="AffiliateTag" T="string" Label="Affiliate Tag"/>
+    </MudCardContent>
+    <MudCardActions >
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="GenerateBookmarklet">Generate Bookmarklet</MudButton>
+    </MudCardActions>
+</MudCard>
+
+<MudText Typo="Typo.h5">Step 2: Save JavaScript as Bookmark</MudText>
+
+<MudTextField @bind-Value="BookmarkletCode" T="string" Label="Bookmarklet Code" Lines="7"
+              ReadOnly="true" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.CopyAll"
+              OnAdornmentClick="CopyToClipboard"/>
+
+@code
+{
+    private readonly StubbleVisitorRenderer _stubble = new StubbleBuilder().Build();
+    private string _bookmarkletTemplate;
+    public string BasePath { get; set; } = "https://amzn.com/dp/";
+    public string AffiliateTag { get; set; }
+    public string BookmarkletCode { get; set; }
+
+    public async Task CopyToClipboard()
+    {
+        await JsInterop.InvokeVoidAsync("navigator.clipboard.writeText", BookmarkletCode);
+        Snackbar.Add("Copied code to the clipboard!", Severity.Success);
+    }
+
+    private async Task GenerateBookmarklet()
+    {
+        if (string.IsNullOrWhiteSpace(_bookmarkletTemplate))
+        {
+            _bookmarkletTemplate = await HttpClient.GetStringAsync("bookmarklet.mustache");
+        }
+        
+        var rendered = await _stubble.RenderAsync(_bookmarkletTemplate, new AmazonAffiliate { AffiliateTag = AffiliateTag, AmazonBasePath = BasePath });
+        var minified = Uglify.Js(rendered).Code;
+        BookmarkletCode = $"javascript:{minified}";
+    }
+}
