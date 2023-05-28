@@ -1,11 +1,12 @@
 // https://stackoverflow.com/a/8578840
 // https://code.tutsplus.com/tutorials/create-bookmarklets-the-right-way--net-18154
 !(function (window, document, affiliateId) {
-    var js,
-        s = 'script',
-        namespace = 'aalb_',
-        id = window._aalcopyAffiliateLink || namespace + uuidv4(),
-        pStyle = 'text-align: center; font-family: inherit; text-transform: uppercase; letter-spacing: .1em; font-size: 1.1em; line-height: 1em; margin-top: 14px; margin-bottom: 14px';
+    const BASE_URI = "{{AmazonBasePath}}";
+    var js;
+    const s = 'script';
+    const namespace = 'aalb_';
+    const id = window._aalcopyAffiliateLink || namespace + uuidv4();
+    var pStyle = 'text-align: center; font-family: inherit; text-transform: uppercase; letter-spacing: .1em; font-size: 1.1em; line-height: 1em; margin-top: 14px; margin-bottom: 14px';
 
     window._aalcopyAffiliateLink = id;
 
@@ -29,23 +30,24 @@
     };
     fjs.parentNode.insertBefore(js, fjs);
 
+    // REF https://dirask.com/posts/JavaScript-UUID-function-in-Vanilla-JS-1X9kgD
     function uuidv4() {
-        // xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
         return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            const r = Math.random() * 16 | 0;
+            const v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
 
     function generateLink(productId, affiliateId) {
         if (affiliateId) {
-            return `https://amzn.com/${productId}?tag=${affiliateId}`;
+            return `${BASE_URI}${productId}?tag=${affiliateId}`;
         }
-        return `https://amzn.com/${productId}`;;
+        return `${BASE_URI}${productId}`;;
     }
 
     function launchAffiliateDialog() {
-        var match = document.location.href.match("/([a-zA-Z0-9]{10})(?:[/?]|$)");
+        const match = document.location.href.match("/([a-zA-Z0-9]{10})(?:[/?]|$)");
         if (!match) {
             vex.dialog.alert({
                 unsafeMessage: `<p style="${pStyle}">Can\'t find the product ID</p>`,
@@ -56,14 +58,14 @@
 
         var productId = match[1];
 
-        // https://github.com/zenorocha/clipboard.js/issues/357
+        // REF https://github.com/zenorocha/clipboard.js/issues/357
         var affiliateLink = 'x' + uuidv4();
-        var copyAffiliateLink = 'x' + uuidv4();
-        var copyProductLink = 'x' + uuidv4();
-        var vexDialog = 'x' + uuidv4();
-        var affiliateInput = 'x' + uuidv4();
+        const copyAffiliateLink = 'x' + uuidv4();
+        const copyProductLink = 'x' + uuidv4();
+        const vexDialog = 'x' + uuidv4();
+        const affiliateInput = 'x' + uuidv4();
 
-        var body = `<p style="${pStyle}">Amazon Affiliate Id</p><input id="${affiliateInput}" type="text" value="${affiliateId}" /><p style="${pStyle}">Shortened Link</p><input id="${affiliateLink}" type="text" value="${generateLink(productId, affiliateId)}" readonly="readonly" data-product-link="${generateLink(productId)}" />`;
+        const body = `<p style="${pStyle}">Amazon Affiliate Id</p><input id="${affiliateInput}" type="text" value="${affiliateId}" /><p style="${pStyle}">Shortened Link</p><input id="${affiliateLink}" type="text" value="${generateLink(productId, affiliateId)}" readonly="readonly" data-product-link="${generateLink(productId)}" />`;
 
         // instantiate new modal
         vex.dialog.open({
@@ -106,4 +108,4 @@
             document.getElementById(affiliateLink).value = generateLink(productId, this.value);
         });
     }
-})(window, document, "");
+})(window, document, "{{AffiliateId}}");
