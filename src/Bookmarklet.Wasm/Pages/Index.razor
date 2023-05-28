@@ -38,7 +38,7 @@
     public async Task CopyToClipboard()
     {
         await JsInterop.InvokeVoidAsync("navigator.clipboard.writeText", BookmarkletCode);
-        Snackbar.Add("Copied code to the clipboard!", Severity.Success, options => options.VisibleStateDuration = 3);
+        Snackbar.Add("Copied code to the clipboard!", Severity.Success);
     }
 
     private async Task GenerateBookmarklet()
