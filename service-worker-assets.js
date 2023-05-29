@@ -1,6 +1,14 @@
 ﻿self.assetsManifest = {
   "assets": [
     {
+      "hash": "sha256-47DEQpj8HBSa+\/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+      "url": ".nojekyll"
+    },
+    {
+      "hash": "sha256-d1l9HdEpCfTIXYXfSZAM0lvQby6BQsnXJmzSW66EABU=",
+      "url": "404.html"
+    },
+    {
       "hash": "sha256-hAU9GsNW5mY0Ly\/NLKZ7ga\/spi3BzMxYPi9iDhbiE88=",
       "url": "bookmarklet.mustache"
     },
@@ -21,7 +29,7 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-9TN8nN3VFzrN6Ew9M4JeKcx7OWPD+LIubPc7nLXw0GM=",
+      "hash": "sha256-P9kKNqNU0opTk+KytS1D9vTaQzFtPOWzqha1LxkC+Z8=",
       "url": "index.html"
     },
     {
@@ -285,5 +293,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "wwgcQZyV"
+  "version": "TifZ4nqf"
 };
