@@ -26,10 +26,10 @@ jobs:
       run: dotnet publish --configuration Release --output build --nologo
     
     - name: Change base-tag in index.html
-      run: sed -i 's/<base href="\/" \/>/<base href="\/amzn-bkmt\/" \/>/g' build.wwwroot/index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/amzn-bkmt\/" \/>/g' build/wwwroot/index.html
 
     - name: Add .nojekyll file
-      run: touch build.wwwroot/.nojekyll
+      run: touch build/wwwroot/.nojekyll
 
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@v4
