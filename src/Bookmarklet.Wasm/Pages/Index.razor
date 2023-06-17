@@ -7,25 +7,26 @@
 @inject IJSRuntime JsInterop
 @inject ISnackbar Snackbar
 
-<MudText Typo="Typo.h2">Instructions</MudText>
-<MudText Typo="Typo.body2">An Amazon affiliate Link bookmarklet generator.</MudText>
-<MudText Typo="Typo.h5">Step 1: Fill in Amazon Affiliate info</MudText>
-
 <MudCard Outlined="true">
     <MudCardContent>
-        <MudTextField @bind-Value="BasePath" T="string" Label="Base Address"/>
-        <MudTextField @bind-Value="AffiliateTag" T="string" Label="Affiliate Tag"/>
+        <MudText Typo="Typo.h2">About</MudText>
+        <MudText Typo="Typo.body2">The Amazon Affiliate Bookmarklet Studio is a small application to help generate bookmarklets for Amazon Affiliates you regularly need to append their Affiliate tags to Amazon product links. The resulting bookmarklet is &lt;2.3kB in size, and consumes &lt;10kB bandwidth to load.</MudText>
     </MudCardContent>
-    <MudCardActions >
-        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="GenerateBookmarklet">Generate Bookmarklet</MudButton>
-    </MudCardActions>
 </MudCard>
 
-<MudText Typo="Typo.h5">Step 2: Save JavaScript as Bookmark</MudText>
-
-<MudTextField @bind-Value="BookmarkletCode" T="string" Label="Bookmarklet Code" Lines="7"
-              ReadOnly="true" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.CopyAll"
-              OnAdornmentClick="CopyToClipboard"/>
+<MudExpansionPanels MultiExpansion="true">
+    <MudExpansionPanel Text="Amazon Affiliate Information" IsInitiallyExpanded="true">
+        <MudTextField @bind-Value="BasePath" T="string" Label="Base Address"/>
+        <MudTextField @bind-Value="AffiliateTag" T="string" Label="Affiliate Tag"/>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="GenerateBookmarklet">Generate Bookmarklet</MudButton>
+    </MudExpansionPanel>
+    <MudExpansionPanel @bind-IsExpanded="BookmarkletAccordionExpanded" Text="Save Bookmarklet">
+        <MudText Typo="Typo.body2">You can use the bookmarklet by dragging this <MudLink @bind-Href="BookmarkletCode" Underline="Underline.Always">Generate Affiliate Link</MudLink> to your browser's bookmark bar, or copy the source code below:</MudText>
+        <MudTextField @bind-Value="BookmarkletCode" T="string" Label="Source Code" Lines="7"
+                      ReadOnly="true" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.CopyAll"
+                      OnAdornmentClick="CopyToClipboard"/>
+    </MudExpansionPanel>
+</MudExpansionPanels>
 
 @code
 {
@@ -34,6 +35,7 @@
     public string BasePath { get; set; } = "https://amzn.com/dp/";
     public string AffiliateTag { get; set; }
     public string BookmarkletCode { get; set; }
+    public bool BookmarkletAccordionExpanded { get; set; }
 
     public async Task CopyToClipboard()
     {
@@ -45,11 +47,12 @@
     {
         if (string.IsNullOrWhiteSpace(_bookmarkletTemplate))
         {
-            _bookmarkletTemplate = await HttpClient.GetStringAsync("bookmarklet.mustache");
+            _bookmarkletTemplate = await HttpClient.GetStringAsync("bookmarklet.mustache.js");
         }
         
         var rendered = await _stubble.RenderAsync(_bookmarkletTemplate, new AmazonAffiliate { AffiliateTag = AffiliateTag, AmazonBasePath = BasePath });
         var minified = Uglify.Js(rendered).Code;
         BookmarkletCode = $"javascript:{minified}";
+        BookmarkletAccordionExpanded = true;
     }
 }

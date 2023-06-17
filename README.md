@@ -1,40 +1,24 @@
-# amzn-bkmt
+# Amazon Affiliate Bookmarklet Studio
 
-An Amazon affiliate Link bookmarklet generator.
-
-## Usage
-
-Copy the following string into you bookmark URL field:
-
-```js
-javascript:!function(n,t,i){function u(){return"xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g,function(n){var t=Math.random()*16|0,i=n=="x"?t:t&3|8;return i.toString(16)})}function f(n,t){return t?`${s}${n}?tag=${t}`:`${s}${n}`}function c(){var e=t.location.href.match("/([a-zA-Z0-9]{10})(?:[/?]|$)");if(!e){vex.dialog.alert({unsafeMessage:`<p style="${o}">Can't find the product ID</p>`,className:"vex-theme-top"});return}var n=e[1],r="x"+u(),s="x"+u(),h="x"+u(),l="x"+u(),c="x"+u(),a=`<p style="${o}">Amazon Affiliate Id</p><input id="${c}" type="text" value="${i}" /><p style="${o}">Shortened Link</p><input id="${r}" type="text" value="${f(n,i)}" readonly="readonly" data-product-link="${f(n)}" />`;vex.dialog.open({input:a,className:"vex-theme-top "+l,buttons:[{text:"Copy",type:"submit",className:`vex-dialog-button-primary ${s}`,click:function(){this.value=!0}},{text:"Product Link Only",type:"submit",className:`vex-dialog-button-secondary ${h}`,click:function(){this.value=!0}}]});new ClipboardJS(`.${h}`,{text:function(){return f(n)}});new ClipboardJS(`.${s}`,{target:function(){return t.getElementById(r)}});t.getElementById(c).addEventListener("input",function(){t.getElementById(r).value=f(n,this.value)})}const s="https://amzn.com/dp/";var r,h="script",e=n._aalcopyAffiliateLink||"aalb_"+u(),o="text-align: center; font-family: inherit; text-transform: uppercase; letter-spacing: .1em; font-size: 1.1em; line-height: 1em; margin-top: 14px; margin-bottom: 14px";if(n._aalcopyAffiliateLink=e,t.getElementById(e)){c();return}fjs=t.getElementsByTagName(h)[0];r=t.createElement(h);r.id=e;r.setAttribute("src","https://cdnjs.cloudflare.com/ajax/libs/loadjs/4.2.0/loadjs.min.js");r.setAttribute("integrity","sha512-kA5njTcOKIwpz6cEPl//I31UH3ivohgL+WSVjdO/iMQWbuzHqxuAdPjRvLEHXTa+M/4AtZNMI6aOEvBtOof7Iw==");r.setAttribute("crossorigin","anonymous");r.onload=function(){loadjs(["https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js","https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.1.0/js/vex.combined.min.js","https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.1.0/css/vex.min.css","https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.1.0/css/vex-theme-top.min.css"],function(){c()})};fjs.parentNode.insertBefore(r,fjs)}(window,document,"gowon-20")
-```
-
-## Developing
-
-- Clone repository
-- Restore .NET Tools
-- Execute `build.csx` script
-
-```powershell
-dotnet tool restore
-dotnet script build.csx
-```
-
-- You can also pass your Amazon affiliate ID as an argument to embed it into the  script.
-
-```powershell
-dotnet script build.csx -- gowon-20
-```
+The Amazon Affiliate Bookmarklet Studio is a small application to help generate bookmarklets for Amazon Affiliates you regularly need to append their Affiliate tags to Amazon product links. The resulting bookmarklet is &lt;2.3kB in size, and consumes &lt;10kB bandwidth to load.
 
 ## Dependencies
 
-- [LoadJS](https://github.com/muicss/loadjs)
-- [clipboard.js](https://clipboardjs.com/)
-- [vex](https://github.hubspot.com/vex/docs/welcome/)
-- [NUglify](https://github.com/trullock/NUglify)
-- [Pastel](https://github.com/silkfire/Pastel)
-- [dotnet script](https://github.com/filipw/dotnet-script)
+- .NET
+  - [MudBlazor](https://github.com/MudBlazor/MudBlazor/)
+  - [NUglify](https://github.com/trullock/NUglify)
+  - [Stubble](https://github.com/stubbleorg/stubble)
+- JavaScript
+  - [LoadJS](https://github.com/muicss/loadjs)
+  - [vex](https://github.hubspot.com/vex/docs/welcome/)
+
+## References
+
+- <https://swimburger.net/blog/dotnet/how-to-deploy-aspnet-blazor-webassembly-to-github-pages>
+- <https://swimburger.net/blog/dotnet/fix-blazor-webassembly-pwa-integrity-checks>
+- <https://blog.elmah.io/blazor-wasm-404-error-and-fix-for-github-pages/>
+- <https://github.com/rafgraph/spa-github-pages>
+- <https://github.com/fernandreu/blazor-pages>
 
 ## License
 

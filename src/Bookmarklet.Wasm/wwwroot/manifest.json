@@ -1,6 +1,6 @@
 {
-  "name": "Bookmarklet.Wasm",
-  "short_name": "Bookmarklet.Wasm",
+  "name": "Amazon Affiliate Bookmarklet Studio",
+  "short_name": "Bookmarklet Studio",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
